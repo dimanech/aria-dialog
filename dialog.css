@@ -1,0 +1,51 @@
+.has-dialog {
+	overflow: hidden;
+}
+
+.dialog-backdrop {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 1;
+	overflow-y: auto;
+}
+
+.dialog-backdrop.is-active {
+	display: block;
+}
+
+.is-underneeth {
+	background-color: transparent;
+}
+
+.modal {
+	display: none;
+	background: white;
+	position: absolute;
+	z-index: 2;
+	width: 300px;
+	top: 2%;
+	left: 50%;
+	transform: translateX(-50%);
+	border: 1px solid #000;
+	padding: 40px;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5)
+}
+
+.panel {
+	background: white;
+	display: none;
+	position: absolute;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	width: 320px;
+}
+
+.is-open {
+	display: block;
+}

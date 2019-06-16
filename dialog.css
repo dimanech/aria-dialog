@@ -1,51 +1,103 @@
+:root {
+	--transition: 0.6s ease;
+}
+
+body {
+	margin: 0;
+}
+
 .has-dialog {
 	overflow: hidden;
 }
 
+.has-dialog .wrapper {
+	overflow: scroll;
+}
+
 .dialog-backdrop {
-	display: none;
 	position: fixed;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background-color: rgba(0, 0, 0, 0.5);
 	z-index: 1;
-	overflow-y: auto;
+	visibility: hidden;
+	transition: visibility var(--transition);
 }
 
 .dialog-backdrop.is-active {
-	display: block;
+	visibility: visible;
+	overflow-y: scroll;
 }
 
-.is-underneeth {
-	background-color: transparent;
+.dialog-backdrop::after {
+	content: "";
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 1;
+	transition: opacity var(--transition);
+	opacity: 0;
+}
+
+.dialog-backdrop.is-active::after {
+	opacity: 1;
+}
+
+.dialog-backdrop.is-last-dialog::after {
+	background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal {
-	display: none;
+	visibility: hidden;
 	background: white;
 	position: absolute;
-	z-index: 2;
+	z-index: 3;
 	width: 300px;
 	top: 2%;
 	left: 50%;
 	transform: translateX(-50%);
+	opacity: 0;
 	border: 1px solid #000;
 	padding: 40px;
-	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5)
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+	transition: var(--transition);
+	transition-property: opacity, visibility;
+}
+.modal.is-open {
+	visibility: visible;
+	opacity: 1;
+	transform: translateX(-50%);
 }
 
 .panel {
 	background: white;
-	display: none;
-	position: absolute;
+	visibility: hidden;
+	position: fixed;
 	right: 0;
 	top: 0;
 	bottom: 0;
 	width: 320px;
+	transform: translateX(100%);
+	transition: var(--transition);
+	transition-property: transform, visibility;
+	padding: 40px;
+	z-index: 3;
+}
+.panel.is-open {
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+	visibility: visible;
+	transform: translateX(0%);
 }
 
-.is-open {
-	display: block;
+@keyframes some {
+	0% {
+		transform: translateY(-30%) translateX(-50%);
+	}
+	
+	100% {
+		transform: translateY(0) translateX(-50%);
+	}
 }

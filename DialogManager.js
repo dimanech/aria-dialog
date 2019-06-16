@@ -33,20 +33,25 @@ class DialogManager {
 		document.body.classList.add('has-dialog');
 		DialogManager.validateStructure(dialogId);
 
-		if (this.openDialogsStack.length > 0) {
+		if (this.openDialogsStack.length > 0) { // If we open dialog was over the last one, remove its listeners
 			this._getCurrentDialog().removeListeners();
+			this._getCurrentDialog().backdropNode.classList.remove('is-last-dialog');
 		}
 
 		const dialog = new Dialog(this, dialogId, focusAfterClose, focusAfterOpen);
 		dialog.open();
+		dialog.backdropNode.classList.add('is-last-dialog');
 		this.openDialogsStack.push(dialog);
 	};
 
 	closeDialog() {
 		this._getCurrentDialog().close();
+		this._getCurrentDialog().backdropNode.classList.add('is-last-dialog');
 		this.openDialogsStack.pop();
+
 		if (this.openDialogsStack.length > 0) { // If a dialog was open underneath the last one, restore its listeners
 			this._getCurrentDialog().addListeners();
+			this._getCurrentDialog().backdropNode.classList.add('is-last-dialog');
 		} else {
 			document.body.classList.remove('has-dialog');
 		}
@@ -54,12 +59,12 @@ class DialogManager {
 
 	replaceDialog(newDialogId, newFocusAfterClosed, newFocusFirst) {
 		const topDialog = this._getCurrentDialog();
-
 		if (!topDialog.dialogNode.contains(document.activeElement)) {
 			return;
 		}
 
 		const focusAfterClosed = newFocusAfterClosed || topDialog.focusAfterClosed;
+		topDialog.backdropNode.classList.remove('is-last-dialog');
 		topDialog.close();
 		this.openDialogsStack.pop();
 		this.openDialog(newDialogId, focusAfterClosed, newFocusFirst);

@@ -36,13 +36,13 @@ class DialogManager {
 		if (this.openDialogsStack.length > 0) { // If we open dialog was over the last one, remove its listeners
 			const prevDialog = this._getCurrentDialog();
 			prevDialog.removeListeners(); // TODO
-			prevDialog.backdropNode.classList.remove('is-last-dialog');
+			prevDialog.backdropNode.classList.remove('is-top-dialog');
 		}
 
 		const dialog = new Dialog(this, dialogId, focusAfterClose, focusAfterOpen);
 		dialog.open();
 		this.openDialogsStack.push(dialog);
-		dialog.backdropNode.classList.add('is-last-dialog');
+		dialog.backdropNode.classList.add('is-top-dialog');
 	};
 
 	closeDialog() {
@@ -56,7 +56,7 @@ class DialogManager {
 		if (this.openDialogsStack.length > 0) { // If a dialog was open underneath the last one, restore its listeners
 			const prevDialog = this._getCurrentDialog();
 			prevDialog.addListeners(); // TODO
-			prevDialog.backdropNode.classList.add('is-last-dialog');
+			prevDialog.backdropNode.classList.add('is-top-dialog');
 		} else {
 			document.body.classList.remove('has-dialog');
 		}
@@ -73,7 +73,7 @@ class DialogManager {
 	};
 
 	_popDialog(dialog) {
-		dialog.backdropNode.classList.remove('is-last-dialog');
+		dialog.backdropNode.classList.remove('is-top-dialog');
 		dialog.close();
 		this.openDialogsStack.pop();
 	}

@@ -1,14 +1,10 @@
 :root {
-	--transition: 0.6s ease;
+	--transition: ease 0.4s;
+	--depth-1: 0 10px 10px rgba(0, 0, 0, 0.5);
+	--depth-2: 0 10px 40px rgba(0, 0, 0, 0.5);
 }
 
-.visually-hidden {
-	position: absolute;
-	clip: rect(1px, 1px, 1px, 1px);
-	overflow: hidden;
-}
-
-*:focus {
+:focus {
 	outline: solid 4px red;
 }
 
@@ -24,7 +20,7 @@ body {
 	overflow: hidden;
 }
 
-.has-dialog .wrapper {
+.has-dialog .wrapper { /* we need a wrapper to handle scroll / no scroll content width bumping */
 	overflow: scroll;
 }
 
@@ -38,33 +34,33 @@ body {
 	visibility: hidden;
 	transition: visibility var(--transition);
 }
-
 .dialog-backdrop.is-active {
 	visibility: visible;
 	overflow-y: scroll;
 }
 
+/* the purpose to make it separate is to handle different animation */
 .dialog-backdrop::after {
 	content: "";
+	background-color: transparent;
 	position: fixed;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
 	z-index: 1;
-	transition: opacity var(--transition);
+	transition: var(--transition);
+	transition-property: opacity, background-color;
 	opacity: 0;
 }
-
-.dialog-backdrop.is-active::after {
+.dialog-backdrop.is-active::after {}
+.dialog-backdrop.is-active.is-top-dialog::after {
 	opacity: 1;
-}
-
-.dialog-backdrop.is-last-dialog::after {
 	background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal {
+	border-radius: 5px;
 	visibility: hidden;
 	background: white;
 	position: relative;
@@ -74,7 +70,7 @@ body {
 	opacity: 0;
 	border: 1px solid #000;
 	padding: 40px;
-	box-shadow: 0 10px 10px rgba(0, 0, 0, 0.5);
+	box-shadow: var(--depth-1);
 	transition: var(--transition);
 	transition-property: opacity, visibility;
 }
@@ -82,8 +78,8 @@ body {
 	visibility: visible;
 	opacity: 1;
 }
-.dialog-backdrop.is-last-dialog .modal {
-	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+.dialog-backdrop.is-top-dialog .modal {
+	box-shadow: var(--depth-2);
 }
 
 .panel {
@@ -101,17 +97,13 @@ body {
 	z-index: 3;
 }
 .panel.is-open {
-	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+	box-shadow: var(--depth-1);
 	visibility: visible;
 	transform: translateX(0%);
 }
 
-@keyframes some {
-	0% {
-		transform: translateY(-30%) translateX(-50%);
-	}
-	
-	100% {
-		transform: translateY(0) translateX(-50%);
-	}
+.close {
+	position: absolute;
+	top: 10px;
+	right: 20px;
 }

@@ -17,249 +17,261 @@
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eros massa, ultricies ac purus vel, condimentum ultrices mauris. Nullam sagittis magna quam, vitae aliquet urna finibus quis. Sed rutrum vestibulum purus. Phasellus dictum varius ligula nec ultrices. Integer posuere faucibus orci, eget aliquam libero luctus non. Sed placerat mi eget euismod finibus. Donec fringilla, massa vehicula posuere gravida, lorem odio rutrum tortor, ut sagittis massa felis vel massa. Proin porttitor sagittis nulla ac volutpat. Nullam pharetra ante id malesuada tempus. Aliquam purus purus, facilisis id neque in, facilisis dapibus metus. Quisque eu metus varius, hendrerit lectus id, porta nisl.
 		</p>
 		
-		<button data-js-open-dialog="alert-1" id="alert-1-label">Open alert</button>
+		<button data-js-open-dialog="alert-1">Open alert</button>
 		<br>
-		<button data-js-open-dialog="modal-1" id="modal-1-label">Open modal (Force user to choice something)</button>
+		<button data-js-open-dialog="modal-1">Open modal (Force user to choice something)</button>
 		
 		<p>
 			Nullam nunc justo, dignissim vel lacinia quis, semper a leo. Suspendisse ut tellus ac est tincidunt mollis laoreet a ligula. Cras vestibulum mauris eu malesuada fermentum. Mauris varius est enim, et rhoncus quam fringilla eu. Sed interdum feugiat velit, at ultrices elit scelerisque ut. Cras quis tincidunt erat. Proin feugiat sem at ipsum iaculis dignissim. Mauris nibh ipsum, sagittis ut purus blandit, tincidunt mollis lacus. Pellentesque ut commodo sem. Sed facilisis sit amet ante eget sagittis. Duis malesuada felis nec eros finibus, ac posuere ipsum venenatis.
 		</p>
 		
 		<br>
-		<button data-js-open-dialog="dialog-1" id="dialog-1-label">Open dialog</button>
+		<button data-js-open-dialog="dialog-1">Open dialog</button>
 		<br>
-		<button data-js-open-dialog="panel-1" id="panel-1-label">Open panel (another styled dialog)</button>
+		<button data-js-open-dialog="panel-1">Open panel (another styled dialog)</button>
 		<br>
 		
-		<div id="alert-1"
-			role="alertdialog"
-			aria-modal="true"
-			aria-labelledby="alert-1-label"
-			aria-describedby="alert-desc"
-			class="modal"
-		>
-			<p id="alert-desc">This site is use cookies. Are you sure that you like cookies from our site in you browser?</p>
-			<button data-js-close>No</button>
-			<button data-js-close>Yes</button>
+		<div class="dialog-backdrop">
+			<div id="alert-1"
+					role="alertdialog"
+					aria-modal="true"
+					aria-label="Cookies alert"
+					aria-describedby="alert-1-descr"
+					class="modal"
+			>
+				<p id="alert-1-descr">This site is use cookies. Are you sure that you like cookies from our site in you browser?</p>
+				<button data-js-close>No</button>
+				<button data-js-close>Yes</button>
+				<button class="close" data-js-close aria-label="Close dialog">&times;</button>
+			</div>
 		</div>
 		
-		<div id="modal-1"
-			role="dialog"
-			aria-labelledby="modal-1-label"
-			aria-modal="true"
-			data-isForceChoice="true"
-			class="modal"
-		>
-			<p>Are you sure that you want to reset form? (You could not escape this dialog until you do not make a choice)</p>
-			<button data-js-close>Yes</button>
-			<button data-js-close>No</button>
+		<div class="dialog-backdrop">
+			<div id="modal-1"
+					role="dialog"
+					aria-modal="true"
+					aria-label="Reset form"
+					aria-describedby="modal-1-descr"
+					data-isForcedToChoice="true"
+					class="modal"
+			>
+				<p id="modal-1-descr">Are you sure that you want to reset form? (You could not escape this dialog until you do not make a choice)</p>
+				<button onclick="dialogManager.closeDialog(true)">Yes</button>
+				<button onclick="dialogManager.closeDialog(true)">No</button>
+			</div>
 		</div>
 		
-		<div id="dialog-1"
-				role="dialog"
-				aria-labelledby="dialog-1-label"
-				aria-modal="true"
-				class="modal"
-		>
-			<button class="close" data-js-close>&times;</button>
-			<p>You could escape from this dialog. More over it will guide you through all form steps.</p>
-			<form class="form">
-				<div class="dialog_form">
-					<div class="dialog_form_item">
-						<label>
-							Street:
-							<input type="text" class="wide_input"/>
-						</label>
+		<div class="dialog-backdrop">
+			<div id="dialog-1"
+					role="dialog"
+					aria-labelledby="dialog-1-label"
+					aria-modal="true"
+					class="modal"
+			>
+				<p id="dialog-1-label">You could escape from this dialog. More over it will guide you through all form steps.</p>
+				<form class="form">
+					<div class="dialog_form">
+						<div class="dialog_form_item">
+							<label>
+								Street:
+								<input type="text" class="wide_input"/>
+							</label>
+						</div>
+						<div class="dialog_form_item">
+							<label>
+								City:
+								<input type="text" class="city_input"/>
+							</label>
+						</div>
 					</div>
-					<div class="dialog_form_item">
-						<label>
-							City:
-							<input type="text" class="city_input"/>
-						</label>
+					<div class="dialog_form_actions">
+						<button onclick="dialogManager.openDialog('dialog-2', this, 'dialog2_para1')">
+							Verify Address (open dialog 2)
+						</button>
+						<button onclick="dialogManager.replaceDialog('dialog-3', undefined, 'dialog3_close_btn')">
+							Add (replace this dialog with dialog 3)
+						</button>
+						<button onclick="dialogManager.closeDialog(this)">
+							Cancel (close dialog)
+						</button>
 					</div>
+				</form>
+				<button class="close" data-js-close aria-label="Close dialog">&times;</button>
+			</div>
+		</div>
+		<div class="dialog-backdrop">
+			<div id="dialog-2"
+					role="dialog"
+					aria-labelledby="dialog-2-label"
+					aria-describedby="dialog-2-desc"
+					aria-modal="true"
+					class="modal">
+				<h2 id="dialog-2-label">
+					Verification Result
+				</h2>
+				<div id="dialog-2-desc">
+					<p tabindex="-1" id="dialog2_para1">
+						This is just a demonstration. If it were a real application, it would
+						provide a message telling whether the entered address is valid.
+					</p>
+					<p>
+						For demonstration purposes, this dialog has a lot of text. It demonstrates a
+						scenario where:
+					</p>
+					<ul>
+						<li>
+							The first interactive element, the help link, is at the bottom of the dialog.
+						</li>
+						<li>
+							If focus is placed on the first interactive element when the dialog opens, the
+							validation message may not be visible.
+						</li>
+						<li>
+							If the validation message is visible and the focus is on the help link, then
+							the focus may not be visible.
+						</li>
+						<li>
+							When the dialog opens, it is important that both:
+							<ul>
+								<li>
+									The beginning of the text is visible so users do not have to scroll back to
+									start reading.
+								</li>
+								<li>
+									The keyboard focus always remains visible.
+								</li>
+							</ul>
+						</li>
+					</ul>
+					<p>
+						There are several ways to resolve this issue:
+					</p>
+					<ul>
+						<li>
+							Place an interactive element at the top of the dialog, e.g., a button or link.
+						</li>
+						<li>
+							Make a static element focusable, e.g., the dialog title or the first block of
+							text.
+						</li>
+					</ul>
+					<p>
+						Please
+						<em>
+							DO NOT
+						</em>
+						make the element with role dialog focusable!
+					</p>
+					<ul>
+						<li>
+							The larger a focusable element is, the more difficult it is to visually
+							identify the location of focus, especially for users with a narrow field of view.
+						</li>
+						<li>
+							The dialog has a visual border, so creating a clear visual indicator of focus
+							when the entire dialog has focus is not very feasible.
+						</li>
+						<li>
+							Screen readers read the label and content of focusable elements. The dialog
+							contains its label and a lot of content! If a dialog like this one has focus, the
+							actual focus is difficult to comprehend.
+						</li>
+					</ul>
+					<p>
+						In this dialog, the first paragraph has
+						<code>
+							tabindex=
+							<q>
+								-1
+							</q>
+						</code>
+						. The first
+						paragraph is also contained inside the element that provides the dialog description, i.e., the element that is referenced
+						by
+						<code>
+							aria-describedby
+						</code>
+						. With some screen readers, this may have one negative
+						but relatively insignificant side effect when the dialog opens -- the first paragraph
+						may be announced twice. Nonetheless, making the first paragraph focusable and setting
+						the initial focus on it is the most broadly accessible option.
+					</p>
 				</div>
 				<div class="dialog_form_actions">
-					<button onclick="dialogManager.openDialog('dialog-2', this, 'dialog2_para1')">
-						Verify Address (open dialog 2)
-					</button>
-					<button onclick="dialogManager.replaceDialog('dialog-3', undefined, 'dialog3_close_btn')">
-						Add (replace this dialog with dialog 3)
+					<a href="#" onclick="dialogManager.openDialog('dialog-4', this)">
+						link to help (open dialog 4)
+					</a>
+					<button onclick="dialogManager.openDialog('dialog-4', this)">
+						accepting an alternative form (open dialog 4)
 					</button>
 					<button onclick="dialogManager.closeDialog(this)">
-						Cancel (close dialog)
+						Close (close Dialog)
 					</button>
 				</div>
-			</form>
-		</div>
-		<div id="dialog-2"
-				role="dialog"
-				aria-labelledby="dialog2_label"
-				aria-describedby="dialog2_desc"
-				aria-modal="true"
-				class="modal">
-			<h2 id="dialog2_label" class="dialog_label">
-				Verification Result
-			</h2>
-			<div id="dialog2_desc" class="dialog_desc">
-				<p tabindex="-1" id="dialog2_para1">
-					This is just a demonstration. If it were a real application, it would
-					provide a message telling whether the entered address is valid.
-				</p>
-				<p>
-					For demonstration purposes, this dialog has a lot of text. It demonstrates a
-					scenario where:
-				</p>
-				<ul>
-					<li>
-						The first interactive element, the help link, is at the bottom of the dialog.
-					</li>
-					<li>
-						If focus is placed on the first interactive element when the dialog opens, the
-						validation message may not be visible.
-					</li>
-					<li>
-						If the validation message is visible and the focus is on the help link, then
-						the focus may not be visible.
-					</li>
-					<li>
-						When the dialog opens, it is important that both:
-						<ul>
-							<li>
-								The beginning of the text is visible so users do not have to scroll back to
-								start reading.
-							</li>
-							<li>
-								The keyboard focus always remains visible.
-							</li>
-						</ul>
-					</li>
-				</ul>
-				<p>
-					There are several ways to resolve this issue:
-				</p>
-				<ul>
-					<li>
-						Place an interactive element at the top of the dialog, e.g., a button or link.
-					</li>
-					<li>
-						Make a static element focusable, e.g., the dialog title or the first block of
-						text.
-					</li>
-				</ul>
-				<p>
-					Please
-					<em>
-						DO NOT
-					</em>
-					make the element with role dialog focusable!
-				</p>
-				<ul>
-					<li>
-						The larger a focusable element is, the more difficult it is to visually
-						identify the location of focus, especially for users with a narrow field of view.
-					</li>
-					<li>
-						The dialog has a visual border, so creating a clear visual indicator of focus
-						when the entire dialog has focus is not very feasible.
-					</li>
-					<li>
-						Screen readers read the label and content of focusable elements. The dialog
-						contains its label and a lot of content! If a dialog like this one has focus, the
-						actual focus is difficult to comprehend.
-					</li>
-				</ul>
-				<p>
-					In this dialog, the first paragraph has
-					<code>
-						tabindex=
-						<q>
-							-1
-						</q>
-					</code>
-					. The first
-					paragraph is also contained inside the element that provides the dialog description, i.e., the element that is referenced
-					by
-					<code>
-						aria-describedby
-					</code>
-					. With some screen readers, this may have one negative
-					but relatively insignificant side effect when the dialog opens -- the first paragraph
-					may be announced twice. Nonetheless, making the first paragraph focusable and setting
-					the initial focus on it is the most broadly accessible option.
-				</p>
-			</div>
-			<div class="dialog_form_actions">
-				<a href="#" onclick="dialogManager.openDialog('dialog-4', this)">
-					link to help (open dialog 4)
-				</a>
-				<button onclick="dialogManager.openDialog('dialog-4', this)">
-					accepting an alternative form (open dialog 4)
-				</button>
-				<button onclick="dialogManager.closeDialog(this)">
-					Close (close Dialog)
-				</button>
 			</div>
 		</div>
-		<div id="dialog-3"
-				role="dialog"
-				aria-labelledby="dialog3_label"
-				aria-describedby="dialog3_desc"
-				aria-modal="true"
-				class="modal">
-			<h2 id="dialog3_label" class="dialog_label">
-				Address Added
-			</h2>
-			<p id="dialog3_desc" class="dialog_desc">
-				The address you provided has been added to your list of delivery addresses. It is ready
-				for immediate use. If you wish to remove it, you can do so from
-				<a href="#" onclick="dialogManager.openDialog('dialog-4', this)">
-					your profile. (open Dialog 4)
-				</a>
-			</p>
-			<div class="dialog_form_actions">
-				<button id="dialog3_close_btn" onclick="dialogManager.closeDialog(this)">
-					OK (close Dialog)
-				</button>
+		<div class="dialog-backdrop">
+			<div id="dialog-3"
+					role="dialog"
+					aria-labelledby="dialog-3-label"
+					aria-describedby="dialog-3-desc"
+					aria-modal="true"
+					class="modal">
+				<h2 id="dialog-3-label" class="dialog_label">
+					Address Added
+				</h2>
+				<p id="dialog-3-desc" class="dialog_desc">
+					The address you provided has been added to your list of delivery addresses. It is ready
+					for immediate use. If you wish to remove it, you can do so from
+					<a href="#" onclick="dialogManager.openDialog('dialog-4', this)">
+						your profile. (open Dialog 4)
+					</a>
+				</p>
+				<div class="dialog_form_actions">
+					<button id="dialog3_close_btn" onclick="dialogManager.closeDialog(this)">
+						OK (close Dialog)
+					</button>
+				</div>
 			</div>
 		</div>
-		<div id="dialog-4"
-				role="dialog"
-				aria-labelledby="dialog-4-label"
-				aria-describedby="dialog-4-desc"
-				class="modal"
-				aria-modal="true"
-		>
-			<h2 id="dialog-4-label" class="dialog_label">
-				End of the Road!
-			</h2>
-			<p id="dialog-4-desc" class="dialog_desc">
-				You activated a fake link or button that goes nowhere!
-				The link or button is present for demonstration purposes only.
-			</p>
-			<div class="dialog_form_actions">
-				<button id="dialog4_close_btn" onclick="dialogManager.closeDialog(this)">
-					Close
-				</button>
+		<div class="dialog-backdrop">
+			<div id="dialog-4"
+					role="dialog"
+					aria-labelledby="dialog-4-label"
+					aria-describedby="dialog-4-desc"
+					class="modal"
+					aria-modal="true"
+			>
+				<h2 id="dialog-4-label" class="dialog_label">
+					End of the Road!
+				</h2>
+				<p id="dialog-4-desc" class="dialog_desc">
+					You activated a fake link or button that goes nowhere!
+					The link or button is present for demonstration purposes only.
+				</p>
+				<div class="dialog_form_actions">
+					<button id="dialog4_close_btn" onclick="dialogManager.closeDialog(this)">
+						Close
+					</button>
+				</div>
 			</div>
 		</div>
 		
-		<div id="panel-1"
-			role="dialog"
-			aria-labelledby="panel-1-label"
-			aria-modal="true"
-			class="panel"
-			aria-label="Hamburger menu"
-		>
-			<button class="close" data-js-close>X</button>
-			<br>
-			<a href="#other">link 1</a>
-			<br>
-			<a href="#other2">link 2</a>
-			<br>
+		<div class="dialog-backdrop">
+			<div id="panel-1"
+					role="dialog"
+					aria-modal="true"
+					class="panel"
+					aria-label="Hamburger menu"
+			>
+				<br>
+				<a href="#other">link 1</a>
+				<br>
+				<a href="#other2">link 2</a>
+				<br>
+				<button class="close" data-js-close aria-label="Close dialog">&times;</button>
+			</div>
 		</div>
-		
-		
-		
 		
 		<br>
 		<button>Page focusable element 2 (Should not be focused if modal open)</button>

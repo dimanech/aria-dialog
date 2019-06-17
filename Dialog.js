@@ -1,39 +1,44 @@
 /*
+*   DIALOG / ALERT DIALOG
 *   This content is licensed according to the W3C Software License at
 *   https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document
-*   Please see full specifications at
+*   Please see full specifications at:
 *   https://www.w3.org/TR/wai-aria-practices/examples/dialog-modal/dialog.html
+*   https://www.w3.org/TR/wai-aria-practices/#alertdialog
 */
 
 class Dialog {
 	constructor(dialogManager, dialogId, focusAfterClosed, focusAfterOpen) {
 		this.focusFirstDescendant = FocusUtils.focusFirstDescendant;
 		this.focusLastDescendant = FocusUtils.focusLastDescendant;
+		this.searchingFocusedElement = FocusUtils.searchingFocusedElement;
 
 		this.dialogManager = dialogManager;
 		this.dialogNode = document.getElementById(dialogId);
 		this.focusAfterClosed = Dialog.setFocusAfterClose(focusAfterClosed);
-		this.focusFirst = Dialog.setFocusFirst(focusAfterOpen);
-		this.isForceChoice = this.dialogNode.getAttribute('data-isForceChoice') || false; // allow close only by choice
+		this.focusAfterOpen = Dialog.setFocusFirst(focusAfterOpen);
+		this.isForcedToChoice = this.dialogNode.getAttribute('data-isForcedToChoice') || false; // allow close only by choice
 		this.backdropNode = null;
 
-		this.createBackdrop();
-
 		this.focusTrap = this.focusTrap.bind(this);
+		this.handleClickOnBackdrop = this.handleClickOnBackdrop.bind(this);
 	}
 
 	open() {
-		this.createFocusTrap(this.dialogNode);
+		this.createBackdrop();
+		this.createFocusTrap();
 		this.addListeners();
+
 		this.dialogNode.classList.add('is-open');
+		this.dialogNode.setAttribute('aria-hidden', 'false');
 
-		if (this.focusFirst) {
-			this.focusFirst.focus();
-		} else {
-			this.focusFirstDescendant(this.dialogNode);
-		}
-		this.lastFocus = document.activeElement;
+		// handle animation/transition delay that could temporary modify a11y tree
+		setTimeout(() => this.focusElementAfterOpen(), 50);
 
+		this.afterOpen();
+	}
+
+	afterOpen() {
 		// TODO: should be handled on implementation
 		this.dialogNode.querySelectorAll('form').forEach(form =>
 			form.addEventListener('submit', (event) => {
@@ -43,23 +48,37 @@ class Dialog {
 	}
 
 	close() {
+		this.beforeClose();
+		this.dialogNode.setAttribute('aria-hidden', 'true');
+		this.dialogNode.classList.remove('is-open');
+		this.backdropNode.classList.remove('is-active');
 		this.removeListeners();
 		this.removeFocusTrap();
-		this.dialogNode.classList.remove('is-open');
 		this.removeBackdrop();
-		this.focusAfterClosed.focus();
-	};
+		this.focusElementAfterClose();
+	}
+
+	beforeClose() {}
 
 	addListeners() {
 		document.addEventListener('focus', this.focusTrap, true);
-	};
+	}
 
 	removeListeners() {
 		document.removeEventListener('focus', this.focusTrap, true);
-	};
+	}
+
+	focusElementAfterOpen() {
+		this.focusAfterOpen ? this.focusAfterOpen.focus() : this.focusFirstDescendant(this.dialogNode);
+		this.lastFocus = document.activeElement;
+	}
+
+	focusElementAfterClose() {
+		this.focusAfterClosed.focus();
+	}
 
 	focusTrap(event) {
-		if (this.dialogManager.ignoreFocusChange) {
+		if (this.searchingFocusedElement) {
 			return;
 		}
 		switch (true) {
@@ -76,42 +95,31 @@ class Dialog {
 		}
 	}
 
-	createFocusTrap(dialogNode) {
+	createFocusTrap() {
 		// Enclose the dialog node with two invisible, focusable nodes.
 		// While this dialog is open, we use these to make sure that focus never
 		// leaves the document even if dialogNode is the first or last node.
 
-		const preDiv = document.createElement('div');
-		this.boundFocusNodeStart = dialogNode.parentNode.insertBefore(preDiv, dialogNode);
-		this.boundFocusNodeStart.tabIndex = 0;
+		const start = document.createElement('div');
+		start.tabIndex = 0;
+		this.backdropNode.insertBefore(start, this.dialogNode);
+		this.boundFocusNodeStart = start;
 
-		const postDiv = document.createElement('div');
-		this.boundFocusNodeEnd = dialogNode.parentNode.insertBefore(postDiv, dialogNode.nextSibling);
-		this.boundFocusNodeEnd.tabIndex = 0;
+		const end = document.createElement('div');
+		end.tabIndex = 0;
+		this.backdropNode.insertBefore(end, this.dialogNode.nextSibling);
+		this.boundFocusNodeEnd = end;
 	}
 
 	removeFocusTrap() {
-		this.boundFocusNodeStart.parentNode.removeChild(this.boundFocusNodeStart);
-		this.boundFocusNodeEnd.parentNode.removeChild(this.boundFocusNodeEnd);
+		this.backdropNode.removeChild(this.boundFocusNodeStart);
+		this.backdropNode.removeChild(this.boundFocusNodeEnd);
 	}
 
 	createBackdrop() {
-		// Wrap modal in an individual backdrop element if one doesn't exist
-		// this approach mimic native dialog implementation with `::backdrop` pseudo-element
-		// and help handle several dialogs on top of each other
-		const backdropClass = 'dialog-backdrop';
-
-		if (this.dialogNode.parentNode && this.dialogNode.parentNode.classList.contains(backdropClass)) {
+		if (!this.backdropNode) {
 			this.backdropNode = this.dialogNode.parentNode;
-		} else {
-			this.backdropNode = document.createElement('div');
-			this.backdropNode.className = backdropClass;
-			this.dialogNode.parentNode.insertBefore(this.backdropNode, this.dialogNode);
-			this.backdropNode.appendChild(this.dialogNode);
-
-			if (!this.isForceChoice) {
-				this.handleClickOnBackdrop();
-			}
+			this.backdropNode.addEventListener('click', this.handleClickOnBackdrop);
 		}
 
 		this.backdropNode.classList.add('is-active');
@@ -119,17 +127,15 @@ class Dialog {
 
 	removeBackdrop() {
 		this.backdropNode.classList.remove('is-active');
+		this.backdropNode.removeEventListener('click', this.handleClickOnBackdrop);
 	}
 
-	handleClickOnBackdrop() {
-		const handleClose = (event) => {
-			if (event.target !== this.backdropNode) {
-				return;
-			}
+	handleClickOnBackdrop(event) {
+		if (event.target !== this.backdropNode) {
+			return;
+		}
 
-			this.dialogManager.closeDialog()
-		};
-		this.backdropNode.addEventListener('click', handleClose);
+		this.dialogManager._closeDialogFromOutside();
 	}
 
 	static setFocusFirst(focusFirst) {
@@ -165,5 +171,5 @@ class Dialog {
 					input.value = '';
 				}
 		);
-	};
+	}
 }

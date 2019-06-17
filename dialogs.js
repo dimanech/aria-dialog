@@ -9,7 +9,7 @@ document.querySelectorAll('[data-js-open-dialog]').forEach(button => {
 	}
 
 	const openModal = () => {
-		dialogManager.openDialog(controlledModalId, button)
+		dialogManager.openDialog(controlledModalId, button);
 	};
 
 	button.addEventListener('click', openModal)

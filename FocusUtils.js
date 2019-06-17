@@ -1,6 +1,6 @@
 class FocusUtils {
 	constructor() {
-		//this.ignoreFocusChange = false;
+		//this.searchingFocusedElement = false;
 	}
 
 	static focusFirstDescendant(element) {
@@ -28,12 +28,14 @@ class FocusUtils {
 			return false;
 		}
 
-		//this.ignoreFocusChange = true;
+		//this.searchingFocusedElement = true;
+
 		try {
 			element.focus();
-		} catch (e) {
-		}
-		//this.ignoreFocusChange = false;
+		} catch (e) {}
+
+		//this.searchingFocusedElement = false;
+
 		return (document.activeElement === element);
 	};
 

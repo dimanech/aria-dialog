@@ -18,13 +18,13 @@ class DialogManager {
 	}
 
 	_handleEscape(event) {
-		if (event.keyCode === this.keyCode.ESC && this._closeCurrentDialog()) {
+		if (event.keyCode === this.keyCode.ESC && this._closeDialogFromOutside()) {
 			event.stopPropagation();
 		}
 	}
 
 	_handleClose(event) {
-		if (event.target.getAttribute('data-js-close') !== null && this.closeDialog()) {
+		if (event.target.getAttribute('data-js-close') !== null && this._closeDialogFromOutside()) {
 			event.stopPropagation();
 		}
 	}
@@ -34,41 +34,60 @@ class DialogManager {
 		DialogManager.validateStructure(dialogId);
 
 		if (this.openDialogsStack.length > 0) { // If we open dialog was over the last one, remove its listeners
-			this._getCurrentDialog().removeListeners();
-			this._getCurrentDialog().backdropNode.classList.remove('is-last-dialog');
+			const prevDialog = this._getCurrentDialog();
+			prevDialog.removeListeners(); // TODO
+			prevDialog.backdropNode.classList.remove('is-last-dialog');
 		}
 
 		const dialog = new Dialog(this, dialogId, focusAfterClose, focusAfterOpen);
 		dialog.open();
-		dialog.backdropNode.classList.add('is-last-dialog');
 		this.openDialogsStack.push(dialog);
+		dialog.backdropNode.classList.add('is-last-dialog');
 	};
 
 	closeDialog() {
-		this._getCurrentDialog().close();
-		this._getCurrentDialog().backdropNode.classList.add('is-last-dialog');
-		this.openDialogsStack.pop();
+		const currentDialog = this._getCurrentDialog();
+		if (!currentDialog) {
+			return false;
+		}
+
+		this._popDialog(currentDialog);
 
 		if (this.openDialogsStack.length > 0) { // If a dialog was open underneath the last one, restore its listeners
-			this._getCurrentDialog().addListeners();
-			this._getCurrentDialog().backdropNode.classList.add('is-last-dialog');
+			const prevDialog = this._getCurrentDialog();
+			prevDialog.addListeners(); // TODO
+			prevDialog.backdropNode.classList.add('is-last-dialog');
 		} else {
 			document.body.classList.remove('has-dialog');
 		}
-	};
+
+		return true;
+	}
 
 	replaceDialog(newDialogId, newFocusAfterClosed, newFocusFirst) {
 		const topDialog = this._getCurrentDialog();
-		if (!topDialog.dialogNode.contains(document.activeElement)) {
-			return;
-		}
-
 		const focusAfterClosed = newFocusAfterClosed || topDialog.focusAfterClosed;
-		topDialog.backdropNode.classList.remove('is-last-dialog');
-		topDialog.close();
-		this.openDialogsStack.pop();
+
+		this._popDialog(topDialog);
 		this.openDialog(newDialogId, focusAfterClosed, newFocusFirst);
 	};
+
+	_popDialog(dialog) {
+		dialog.backdropNode.classList.remove('is-last-dialog');
+		dialog.close();
+		this.openDialogsStack.pop();
+	}
+
+	_closeDialogFromOutside() {
+		const currentDialog = this._getCurrentDialog();
+
+		if (currentDialog.isForcedToChoice) {
+			this._createAlert(currentDialog, 'Please make a choice in modal window');
+			return false;
+		}
+
+		this.closeDialog();
+	}
 
 	_getCurrentDialog() {
 		if (this.openDialogsStack.length) {
@@ -76,15 +95,22 @@ class DialogManager {
 		}
 	}
 
-	_closeCurrentDialog() {
-		const currentDialog = this._getCurrentDialog();
-		if (currentDialog && !currentDialog.isForceChoice) {
-			currentDialog.close();
-			this.openDialogsStack.pop();
-			return true;
+	_createAlert(dialog, message) {
+		if (!this.alert) {
+			this.alert = document.createElement('div');
+			this.alert.setAttribute('role', 'alert');
 		}
 
-		return false;
+		this.alert.textContent = message;
+		dialog.dialogNode.appendChild(this.alert);
+
+		clearTimeout(this.alertTimout);
+		this.alertTimout = setTimeout(() => {
+			if (this.alert) {
+				dialog.dialogNode.removeChild(this.alert);
+			}
+			this.alert = null;
+		}, 1000);
 	}
 
 	static validateStructure(dialogId) {

@@ -25,16 +25,6 @@ class Dialog {
 		this.handleBackdropClick = this.handleBackdropClick.bind(this);
 	}
 
-	bringDown() {
-		this.removeEventListeners();
-		this.backdropNode.classList.remove('is-top-dialog');
-	}
-
-	bringOnTop() {
-		this.initEventListeners();
-		this.backdropNode.classList.add('is-top-dialog');
-	}
-
 	create() {
 		this.initBackdrop();
 		this.createFocusTrap();
@@ -60,6 +50,16 @@ class Dialog {
 		this.dialogNode.setAttribute('aria-hidden', 'true');
 
 		this.focusElementAfterClose();
+	}
+
+	bringDown() {
+		this.removeEventListeners();
+		this.backdropNode.classList.remove('is-top-dialog');
+	}
+
+	bringOnTop() {
+		this.initEventListeners();
+		this.backdropNode.classList.add('is-top-dialog');
 	}
 
 	focusElementAfterOpen() {
@@ -127,11 +127,13 @@ class Dialog {
 
 		this.backdropNode.addEventListener('click', this.handleBackdropClick);
 		this.backdropNode.classList.add('is-active');
+		this.backdropNode.classList.add('is-top-dialog');
 	}
 
 	removeBackdrop() {
 		this.backdropNode.removeEventListener('click', this.handleBackdropClick);
 		this.backdropNode.classList.remove('is-active');
+		this.backdropNode.classList.remove('is-top-dialog');
 	}
 
 	encloseModalWithBackdrop(backdropClass) {

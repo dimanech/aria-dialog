@@ -15,15 +15,12 @@ class DialogManager {
 
 		if (this.dialogsStack.length > 0) { // If we open dialog over the last one
 			this._bringCurrentDialogDown();
-		} else {
+		} else { // If this is first opened dialog
 			document.body.classList.add('has-dialog');
 			this._addEventListeners();
 		}
 
-		const dialog = new Dialog(this, dialogId, focusAfterClose, focusAfterOpen);
-		dialog.create();
-		dialog.backdropNode.classList.add('is-top-dialog');
-		this.dialogsStack.push(dialog);
+		this._createDialog(dialogId, focusAfterClose, focusAfterOpen);
 	};
 
 	closeDialog() {
@@ -36,7 +33,7 @@ class DialogManager {
 
 		if (this.dialogsStack.length > 0) {
 			this._bringCurrentDialogToTop(); // after destroy previous one is currentDialog
-		} else {
+		} else { // if this the last opened dialog
 			document.body.classList.remove('has-dialog');
 			this._removeEventListeners();
 		}
@@ -74,23 +71,29 @@ class DialogManager {
 		}
 	}
 
-	_bringCurrentDialogToTop () {
-		const prevDialog = this._getCurrentDialog();
-		prevDialog.bringOnTop();
-		prevDialog.backdropNode.classList.add('is-top-dialog');
+	_getCurrentDialog() {
+		if (this.dialogsStack.length) {
+			return this.dialogsStack[this.dialogsStack.length - 1];
+		}
 	}
 
-	_bringCurrentDialogDown () {
-		const prevDialog = this._getCurrentDialog();
-		prevDialog.bringDown();
-		prevDialog.backdropNode.classList.remove('is-top-dialog')
+	_createDialog(dialogId, focusAfterClose, focusAfterOpen) {
+		const dialog = new Dialog(this, dialogId, focusAfterClose, focusAfterOpen);
+		dialog.create();
+		this.dialogsStack.push(dialog);
 	}
 
 	_destroyCurrentDialog() {
-		const currentDialog = this._getCurrentDialog();
-		currentDialog.backdropNode.classList.remove('is-top-dialog');
-		currentDialog.destroy();
+		this._getCurrentDialog().destroy();
 		this.dialogsStack.pop();
+	}
+
+	_bringCurrentDialogToTop () {
+		this._getCurrentDialog().bringOnTop();
+	}
+
+	_bringCurrentDialogDown () {
+		this._getCurrentDialog().bringDown();
 	}
 
 	_closeDialogFromOutside() {
@@ -105,12 +108,6 @@ class DialogManager {
 		}
 
 		return this.closeDialog();
-	}
-
-	_getCurrentDialog() {
-		if (this.dialogsStack.length) {
-			return this.dialogsStack[this.dialogsStack.length - 1];
-		}
 	}
 
 	_createAlert(dialog, message) {

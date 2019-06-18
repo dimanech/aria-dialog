@@ -80,6 +80,9 @@ class DialogManager {
 
 	_closeDialogFromOutside() {
 		const currentDialog = this._getCurrentDialog();
+		if (!currentDialog) { // All dialogs could be closed when ESC is fired
+			return false;
+		}
 
 		if (currentDialog.isForcedToChoice) {
 			this._createAlert(currentDialog, 'Please make a choice in modal window');

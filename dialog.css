@@ -37,6 +37,7 @@ body {
 .dialog-backdrop.is-active {
 	visibility: visible;
 	overflow-y: scroll;
+	overflow-y: overlay;
 }
 
 /* the purpose to make it separate is to handle different animation */
@@ -70,16 +71,18 @@ body {
 	opacity: 0;
 	border: 1px solid #000;
 	padding: 40px;
-	box-shadow: var(--depth-1);
+	transform: scale(0.9);
+	box-shadow: var(--depth-1); /* previous added dialog will have less depth that one on top */
 	transition: var(--transition);
-	transition-property: opacity, visibility;
+	transition-property: opacity, visibility, transform;
 }
 .modal.is-open {
 	visibility: visible;
 	opacity: 1;
+	transform: scale(1);
 }
 .dialog-backdrop.is-top-dialog .modal {
-	box-shadow: var(--depth-2);
+	box-shadow: var(--depth-2); /* move stack dialog or singe dialog to top of stack */
 }
 
 .panel {

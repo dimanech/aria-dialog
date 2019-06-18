@@ -16,7 +16,6 @@ document.querySelectorAll('[data-js-open-dialog]').forEach(button => {
 });
 
 // Make bootstrap basic compatibility
-
 document.querySelectorAll('[data-toggle="modal"]').forEach(button => {
 	const controlledModalId = button.getAttribute('data-target');
 	if (controlledModalId === null) {

@@ -1,5 +1,5 @@
 /*
-*   DIALOG / ALERT DIALOG
+*   Dialog / Alert dialog
 *   This content is licensed according to the W3C Software License at
 *   https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document
 *   Please see full specifications at:
@@ -34,6 +34,8 @@ class Dialog {
 		this.dialogNode.setAttribute('aria-hidden', 'false');
 
 		// handle animation/transition delay that could temporary modify a11y tree
+		// focus could not trap into modal if user tab before this timeout
+		// please see tab handler
 		setTimeout(() => this.focusElementAfterOpen(), 50);
 
 		this.afterOpen();
@@ -90,14 +92,19 @@ class Dialog {
 			case (event.target === this.boundFocusNodeEnd):
 				this.focusFirstDescendant(this.dialogNode);
 				break;
+			case (!this.dialogNode.contains(event.target)):
+				this.focusFirstDescendant(this.dialogNode); // in case when window is animated and user tab
+				break;
 			default:
 		}
 	}
 
-	createFocusTrap(startClass, endClass) {
+	createFocusTrap() {
 		// Enclose the dialog node with two invisible, focusable nodes.
 		// While this dialog is open, we use these to make sure that focus never
 		// leaves the document even if dialogNode is the first or last node.
+		// This start to work only when some element inside dialog is focused so
+		// please see focusElementAfterOpen
 
 		const firstFocusable = document.createElement('div');
 		firstFocusable.tabIndex = 0;
@@ -148,7 +155,7 @@ class Dialog {
 			return;
 		}
 
-		this.dialogManager._closeDialogFromOutside();
+		this.dialogManager.closeDialogFromOutside();
 	}
 
 	afterOpen() {

@@ -41,6 +41,23 @@ class DialogManager {
 		return true;
 	}
 
+	closeDialogFromOutside() {
+		// This method is designed to close last dialog, but only in case if it not specific button, like
+		// close modal button, backdrop click or ESC, that do not know if particular dialog is try to force
+		// user to make a choice.
+		const currentDialog = this._getCurrentDialog();
+		if (!currentDialog) {
+			return false;
+		}
+
+		if (currentDialog.isForcedToChoice) {
+			this._createAlert(currentDialog, 'Please make a choice in modal window');
+			return false;
+		}
+
+		return this.closeDialog();
+	}
+
 	replaceDialog(newDialogId, newFocusAfterClosed, newFocusFirst) {
 		const topDialog = this._getCurrentDialog();
 		const focusAfterClosed = newFocusAfterClosed || topDialog.focusAfterClose;
@@ -60,13 +77,13 @@ class DialogManager {
 	}
 
 	_handleEscape(event) {
-		if (event.keyCode === this.keyCode.ESC && this._closeDialogFromOutside()) {
+		if (event.keyCode === this.keyCode.ESC && this.closeDialogFromOutside()) {
 			event.stopPropagation();
 		}
 	}
 
 	_handleCloseButton(event) {
-		if (event.target.getAttribute('data-dismiss') !== null && this._closeDialogFromOutside()) {
+		if (event.target.getAttribute('data-dismiss') !== null && this.closeDialogFromOutside()) {
 			event.stopPropagation();
 		}
 	}
@@ -94,20 +111,6 @@ class DialogManager {
 
 	_bringCurrentDialogDown () {
 		this._getCurrentDialog().bringDown();
-	}
-
-	_closeDialogFromOutside() {
-		const currentDialog = this._getCurrentDialog();
-		if (!currentDialog) {
-			return false;
-		}
-
-		if (currentDialog.isForcedToChoice) {
-			this._createAlert(currentDialog, 'Please make a choice in modal window');
-			return false;
-		}
-
-		return this.closeDialog();
 	}
 
 	_createAlert(dialog, message) {

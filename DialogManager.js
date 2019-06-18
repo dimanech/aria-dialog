@@ -4,45 +4,26 @@ class DialogManager {
 			ESC: 27
 		});
 
-		this.openDialogsStack = [];
+		this.dialogsStack = [];
 
 		this.handleEscape = this._handleEscape.bind(this);
-		this.handleClose = this._handleClose.bind(this);
-
-		this._addEventListeners();
-	}
-
-	_addEventListeners() {
-		document.addEventListener('keyup', this.handleEscape);
-		document.addEventListener('click', this.handleClose);
-	}
-
-	_handleEscape(event) {
-		if (event.keyCode === this.keyCode.ESC && this._closeDialogFromOutside()) {
-			event.stopPropagation();
-		}
-	}
-
-	_handleClose(event) {
-		if (event.target.getAttribute('data-js-close') !== null && this._closeDialogFromOutside()) {
-			event.stopPropagation();
-		}
+		this.handleClose = this._handleCloseButton.bind(this);
 	}
 
 	openDialog(dialogId, focusAfterClose, focusAfterOpen) {
-		document.body.classList.add('has-dialog');
-		DialogManager.validateStructure(dialogId);
+		DialogManager.validateDialogStructure(dialogId);
 
-		if (this.openDialogsStack.length > 0) { // If we open dialog was over the last one, remove its listeners
-			const prevDialog = this._getCurrentDialog();
-			prevDialog.removeListeners(); // TODO
-			prevDialog.backdropNode.classList.remove('is-top-dialog');
+		if (this.dialogsStack.length > 0) { // If we open dialog over the last one
+			this._bringCurrentDialogDown();
+		} else {
+			document.body.classList.add('has-dialog');
+			this._addEventListeners();
 		}
 
 		const dialog = new Dialog(this, dialogId, focusAfterClose, focusAfterOpen);
-		dialog.open();
-		this.openDialogsStack.push(dialog);
+		dialog.create();
 		dialog.backdropNode.classList.add('is-top-dialog');
+		this.dialogsStack.push(dialog);
 	};
 
 	closeDialog() {
@@ -51,14 +32,13 @@ class DialogManager {
 			return false;
 		}
 
-		this._popDialog(currentDialog);
+		this._destroyCurrentDialog();
 
-		if (this.openDialogsStack.length > 0) { // If a dialog was open underneath the last one, restore its listeners
-			const prevDialog = this._getCurrentDialog();
-			prevDialog.addListeners(); // TODO
-			prevDialog.backdropNode.classList.add('is-top-dialog');
+		if (this.dialogsStack.length > 0) {
+			this._bringCurrentDialogToTop(); // after destroy previous one is currentDialog
 		} else {
 			document.body.classList.remove('has-dialog');
+			this._removeEventListeners();
 		}
 
 		return true;
@@ -66,21 +46,56 @@ class DialogManager {
 
 	replaceDialog(newDialogId, newFocusAfterClosed, newFocusFirst) {
 		const topDialog = this._getCurrentDialog();
-		const focusAfterClosed = newFocusAfterClosed || topDialog.focusAfterClosed;
+		const focusAfterClosed = newFocusAfterClosed || topDialog.focusAfterClose;
 
-		this._popDialog(topDialog);
+		this._destroyCurrentDialog();
 		this.openDialog(newDialogId, focusAfterClosed, newFocusFirst);
 	};
 
-	_popDialog(dialog) {
-		dialog.backdropNode.classList.remove('is-top-dialog');
-		dialog.close();
-		this.openDialogsStack.pop();
+	_addEventListeners() {
+		document.addEventListener('keyup', this.handleEscape);
+		document.addEventListener('click', this.handleClose);
+	}
+
+	_removeEventListeners() {
+		document.removeEventListener('keyup', this.handleEscape);
+		document.removeEventListener('click', this.handleClose);
+	}
+
+	_handleEscape(event) {
+		if (event.keyCode === this.keyCode.ESC && this._closeDialogFromOutside()) {
+			event.stopPropagation();
+		}
+	}
+
+	_handleCloseButton(event) {
+		if (event.target.getAttribute('data-dismiss') !== null && this._closeDialogFromOutside()) {
+			event.stopPropagation();
+		}
+	}
+
+	_bringCurrentDialogToTop () {
+		const prevDialog = this._getCurrentDialog();
+		prevDialog.bringOnTop();
+		prevDialog.backdropNode.classList.add('is-top-dialog');
+	}
+
+	_bringCurrentDialogDown () {
+		const prevDialog = this._getCurrentDialog();
+		prevDialog.bringDown();
+		prevDialog.backdropNode.classList.remove('is-top-dialog')
+	}
+
+	_destroyCurrentDialog() {
+		const currentDialog = this._getCurrentDialog();
+		currentDialog.backdropNode.classList.remove('is-top-dialog');
+		currentDialog.destroy();
+		this.dialogsStack.pop();
 	}
 
 	_closeDialogFromOutside() {
 		const currentDialog = this._getCurrentDialog();
-		if (!currentDialog) { // All dialogs could be closed when ESC is fired
+		if (!currentDialog) {
 			return false;
 		}
 
@@ -89,12 +104,12 @@ class DialogManager {
 			return false;
 		}
 
-		this.closeDialog();
+		return this.closeDialog();
 	}
 
 	_getCurrentDialog() {
-		if (this.openDialogsStack.length) {
-			return this.openDialogsStack[this.openDialogsStack.length - 1];
+		if (this.dialogsStack.length) {
+			return this.dialogsStack[this.dialogsStack.length - 1];
 		}
 	}
 
@@ -116,7 +131,7 @@ class DialogManager {
 		}, 1000);
 	}
 
-	static validateStructure(dialogId) {
+	static validateDialogStructure(dialogId) {
 		if (dialogId === null || document.getElementById(dialogId) === null) {
 			throw new Error(`No element found with id="${dialogId}".`);
 		}
@@ -129,7 +144,7 @@ class DialogManager {
 					return token === role;
 				}));
 		if (!isDialog) {
-			throw new Error('Dialog() requires a DOM element with ARIA role of dialog or alertdialog.');
+			throw new Error('Dialog() requires a DOM element with ARIA role of "dialog" or "alertdialog".');
 		}
 	}
 }

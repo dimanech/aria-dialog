@@ -21,7 +21,7 @@ body {
 }
 
 .has-dialog .wrapper { /* we need a wrapper to handle scroll / no scroll content width bumping */
-	overflow: scroll;
+	overflow-y: scroll;
 }
 
 .dialog-backdrop {
@@ -37,7 +37,9 @@ body {
 .dialog-backdrop.is-active {
 	visibility: visible;
 	overflow-y: scroll;
-	overflow-y: overlay;
+}
+.dialog-backdrop.is-stacked {
+	overflow-y: scroll;
 }
 
 /* the purpose to make it separate is to handle different animation */

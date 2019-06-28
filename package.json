@@ -1,6 +1,6 @@
 {
   "name": "aria-dialog",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "WAI ARIA AAA compatible dialogs/modal/alert windows",
   "main": "DialogManager.js",
   "scripts": {

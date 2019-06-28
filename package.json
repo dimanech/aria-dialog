@@ -1,0 +1,19 @@
+{
+  "name": "aria-dialog",
+  "version": "1.0.1",
+  "description": "WAI ARIA AAA compatible dialogs/modal/alert windows",
+  "main": "DialogManager.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:dimanech/aria-focus-highlighter.git"
+  },
+  "author": "Nechepurenko D.",
+  "devDependencies": {
+    "eslint": "^6.0.1",
+    "stylelint": "^10.1.0"
+  }
+}

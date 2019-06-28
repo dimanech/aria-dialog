@@ -38,9 +38,6 @@ body {
 	visibility: visible;
 	overflow-y: scroll;
 }
-.dialog-backdrop.is-stacked {
-	overflow-y: scroll;
-}
 
 /* the purpose to make it separate is to handle different animation */
 .dialog-backdrop::after {

@@ -336,9 +336,36 @@
 		</div>
 	
 	</div>
-	<script src="FocusUtils.js"></script>
-	<script src="Dialog.js"></script>
-	<script src="DialogManager.js"></script>
-	<script src="dialogs.js"></script>
+	<script type="module">
+		import DialogManager from './DialogManager.js';
+		window.dialogManager = new DialogManager();
+
+		document.querySelectorAll('[data-js-open-dialog]').forEach(button => {
+			const controlledModalId = button.getAttribute('data-js-open-dialog');
+			if (controlledModalId === null) {
+				return;
+			}
+
+			const openModal = () => {
+				dialogManager.openDialog(controlledModalId, button);
+			};
+
+			button.addEventListener('click', openModal)
+		});
+
+		// Make bootstrap basic compatibility
+		document.querySelectorAll('[data-toggle="modal"]').forEach(button => {
+			const controlledModalId = button.getAttribute('data-target');
+			if (controlledModalId === null) {
+				return;
+			}
+
+			const openModal = () => {
+				dialogManager.openDialog(controlledModalId, button)
+			};
+
+			button.addEventListener('click', openModal)
+		});
+	</script>
 </body>
 </html>

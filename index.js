@@ -1,3 +1,5 @@
-export * from './DialogManager.js';
-export * from './Dialog.js';
-export * from './FocusUtils.js';
+import DialogManager from './DialogManager.js';
+import Dialog from './Dialog.js';
+import FocusUtils from './FocusUtils.js';
+
+export { DialogManager, Dialog, FocusUtils };

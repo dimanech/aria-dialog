@@ -1,6 +1,6 @@
-# ARIA Dialog
+# aria-dialog
 
-WAI ARIA AAA compatible dialogs/modal/alert windows implementation.
+WAI ARIA AAA compatible dialogs/modal/alert windows implementation. That could be used to create offcanvas panels, alers, dialogs and modal windows.
 
 Please see full specifications at:
 

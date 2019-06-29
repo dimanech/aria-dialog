@@ -9,7 +9,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git@github.com:dimanech/aria-focus-highlighter.git"
+    "url": "git@github.com:dimanech/aria-dialog.git"
   },
   "author": "Nechepurenko D.",
   "devDependencies": {

@@ -12,7 +12,7 @@ Please see full specifications at:
 You could initialize this component in this way:
 
 ```js
-import DialogManager from './DialogManager.js';
+import DialogManager from 'aria-dialog';
 window.dialogManager = new DialogManager();
 
 dialogManager.openDialog('controlledModalId', triggerButton);

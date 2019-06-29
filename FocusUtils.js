@@ -11,7 +11,7 @@ export default class FocusUtils {
 			}
 		}
 		return false;
-	};
+	}
 
 	static focusLastDescendant(element) {
 		for (let i = element.childNodes.length - 1; i >= 0; i--) {
@@ -21,7 +21,7 @@ export default class FocusUtils {
 			}
 		}
 		return false;
-	};
+	}
 
 	static attemptFocus(element) {
 		if (!FocusUtils.isFocusable(element)) {
@@ -33,12 +33,13 @@ export default class FocusUtils {
 		try {
 			element.focus();
 		} catch (e) {
+			// some
 		}
 
 		this.searchingFocusedElement = false;
 
 		return (document.activeElement === element);
-	};
+	}
 
 	static isFocusable(element) {
 		if (element.tabIndex > 0 || (element.tabIndex === 0 && element.getAttribute('tabIndex') !== null)) {
@@ -61,5 +62,5 @@ export default class FocusUtils {
 			default:
 				return false;
 		}
-	};
+	}
 }

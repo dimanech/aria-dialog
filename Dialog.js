@@ -14,7 +14,8 @@ export default class Dialog {
 		this.dialogNode = document.getElementById(dialogId);
 		this.focusAfterClose = Dialog.setFocusAfterCloseElement(focusAfterClose);
 		this.focusAfterOpen = Dialog.setFocusAfterOpenElement(focusAfterOpen);
-		this.isForcedToChoice = this.dialogNode.getAttribute('data-isForcedToChoice') || false; // allow close only by choice
+		this.isForcedToChoice = this.dialogNode.getAttribute('data-isForcedToChoice') ||
+			false; // allow close only by choice
 		this.backdropNode = null;
 
 		// Additional methods
@@ -163,9 +164,9 @@ export default class Dialog {
 		// TODO: should be handled on implementation
 		this.dialogNode.querySelectorAll('form').forEach(form =>
 			form.addEventListener('submit', (event) => {
-				event.preventDefault()
+				event.preventDefault();
 			})
-		)
+		);
 	}
 
 	beforeClose() {

@@ -21,7 +21,7 @@ export default class DialogManager {
 		}
 
 		this._createDialog(dialogId, focusAfterClose, focusAfterOpen);
-	};
+	}
 
 	closeDialog() {
 		const currentDialog = this._getCurrentDialog();
@@ -64,7 +64,7 @@ export default class DialogManager {
 
 		this._destroyCurrentDialog();
 		this.openDialog(newDialogId, focusAfterClosed, newFocusFirst);
-	};
+	}
 
 	_addEventListeners() {
 		document.addEventListener('keyup', this.handleEscape);

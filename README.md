@@ -18,14 +18,46 @@ Please see full specifications at:
 
 ## Supporting browsers
 
-* IE10 with babel
-* Edge
+* IE10 (with Babel + DOM Collections forEach)
+* Edge 44.18362.1.0
 * Chrome
 * Safari
 * FF
 
+
+* Windows Narrator with MS Edge
 * MacOS VoiceOver with Safari
 * Gnome Orca Screen Reader 3.32 with Firefox (Gecko) and Epiphany (WebKitGtk)
+
+### Known issues
+
+* Windows Narrator and Orca not announce alert content in "force modal" dialog 
+
+## API
+
+### DialogManager
+
+Control the dialog stack. All dialogs manipulations should be through the magager.
+
+#### DialogManager.openDialog(dialogId, focusAfterClose, focusAfterOpen)
+
+Create new dialog
+
+* `dialogId` `String` - Mandatory. The id of dialog
+* `focusAfterClose` `String|Object` - Mandatory. The id of element that should be focused after dialog is closed. As usual this is dialog trigger button.
+* `focusAfterOpen` `String|Object` - Optional. The id of element that should be focused inside the new dialog. If not provided the first focusable element will be selected.
+
+#### DialogManager.replaceDialog(dialogId, focusAfterClose, focusAfterOpen)
+
+Replace current top dialog with new dialog. Accept same options as `openDialog`
+
+#### DialogManager.closeDialog()
+
+Close top dialog
+
+#### DialogManager.closeDialogFromOutside()
+
+Create to bind close function and check is dialog closable from outside or force user to make a choice from one of options
 
 ## Usage
 
@@ -33,10 +65,22 @@ You could initialize this component in this way:
 
 ```js
 import DialogManager from 'aria-dialog';
+
 window.dialogManager = new DialogManager();
 
 document.querySelectorAll('[data-trigger="modal"]').forEach(button => 
 	button.addEventListener('click', dialogManager.openDialog('controlledModalId', button)));
+
+document.querySelectorAll('[data-dismiss="modal"]').forEach(button => 
+	button.addEventListener('click', dialogManager.closeDialog()));
+```
+
+```html
+<button data-trigger="modal">Open dialog</button>
+
+Alternativlly:
+<button onclick="dialogManager.openDialog('dialog-2', this, 'dialog2_para1')">Close</button>
+<button onclick="dialogManager.closeDialog()">Close</button>
 ```
 
 ## License

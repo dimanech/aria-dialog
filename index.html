@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="dialog.css">
 </head>
 <body>
+	<div role="alert" id="page-alert-content"></div>
 	<div class="wrapper">
 		<h1>This example cover Dialog and Alert Dialog patterns that designed to interrupt user flow</h1>
 		<a href="https://www.w3.org/TR/wai-aria-practices/#alertdialog">Alert dialog Page focusable element 1 (Should not be focused if modal open)</a>
@@ -33,11 +34,11 @@
 		
 		<div class="dialog-backdrop">
 			<div id="alert-1"
-					role="alertdialog"
-					aria-modal="true"
-					aria-label="Cookies alert"
-					aria-describedby="alert-1-descr"
-					class="modal"
+				role="alertdialog"
+				aria-modal="true"
+				aria-label="Cookies alert"
+				aria-describedby="alert-1-descr"
+				class="modal"
 			>
 				<p id="alert-1-descr">This site is use cookies. Are you sure that you like cookies from our site in you browser?</p>
 				<button data-dismiss="modal">No</button>
@@ -48,27 +49,28 @@
 		
 		<div class="dialog-backdrop">
 			<div id="modal-1"
-					role="dialog"
-					aria-modal="true"
-					aria-label="Reset form"
-					aria-describedby="modal-1-descr"
-					data-isForcedToChoice="true"
-					class="modal"
+				role="dialog"
+				aria-modal="true"
+				aria-label="Reset form"
+				aria-describedby="modal-1-descr"
+				data-isForcedToChoice="true"
+				class="modal"
 			>
 				<p id="modal-1-descr">Are you sure that you want to reset form? (You could not escape this dialog until you do not make a choice)</p>
-				<button onclick="dialogManager.closeDialog(true)">Yes</button>
-				<button onclick="dialogManager.closeDialog(true)">No</button>
+				<button onclick="dialogManager.closeDialog()">Yes</button>
+				<button onclick="dialogManager.closeDialog()">No</button>
 			</div>
 		</div>
 		
 		<div class="dialog-backdrop">
 			<div id="dialog-1"
-					role="dialog"
-					aria-labelledby="dialog-1-label"
-					aria-modal="true"
-					class="modal"
+				role="dialog"
+				aria-label="Address verification dialog"
+				aria-describedby="dialog-1-descr"
+				aria-modal="true"
+				class="modal"
 			>
-				<p id="dialog-1-label">You could escape from this dialog. More over it will guide you through all form steps.</p>
+				<p id="dialog-1-descr">You could escape from this dialog. More over it will guide you through all form steps.</p>
 				<form class="form">
 					<div class="dialog_form">
 						<div class="dialog_form_item">
@@ -91,7 +93,7 @@
 						<button onclick="dialogManager.replaceDialog('dialog-3', undefined, 'dialog3_close_btn')">
 							Add (replace this dialog with dialog 3)
 						</button>
-						<button onclick="dialogManager.closeDialog(this)">
+						<button onclick="dialogManager.closeDialog()">
 							Cancel (close dialog)
 						</button>
 					</div>
@@ -101,16 +103,16 @@
 		</div>
 		<div class="dialog-backdrop">
 			<div id="dialog-2"
-					role="dialog"
-					aria-labelledby="dialog-2-label"
-					aria-describedby="dialog-2-desc"
-					aria-modal="true"
-					class="modal">
+				role="dialog"
+				aria-labelledby="dialog-2-label"
+				aria-describedby="dialog-2-desc"
+				aria-modal="true"
+				class="modal">
 				<h2 id="dialog-2-label">
 					Verification Result
 				</h2>
-				<div id="dialog-2-desc">
-					<p tabindex="-1" id="dialog2_para1">
+				<div>
+					<p tabindex="-1" id="dialog-2-desc">
 						This is just a demonstration. If it were a real application, it would
 						provide a message telling whether the entered address is valid.
 					</p>
@@ -204,7 +206,7 @@
 					<button onclick="dialogManager.openDialog('dialog-4', this)">
 						accepting an alternative form (open dialog 4)
 					</button>
-					<button onclick="dialogManager.closeDialog(this)">
+					<button onclick="dialogManager.closeDialog()">
 						Close (close Dialog)
 					</button>
 				</div>
@@ -212,15 +214,15 @@
 		</div>
 		<div class="dialog-backdrop">
 			<div id="dialog-3"
-					role="dialog"
-					aria-labelledby="dialog-3-label"
-					aria-describedby="dialog-3-desc"
-					aria-modal="true"
-					class="modal">
-				<h2 id="dialog-3-label" class="dialog_label">
+				role="dialog"
+				aria-labelledby="dialog-3-label"
+				aria-describedby="dialog-3-desc"
+				aria-modal="true"
+				class="modal">
+				<h2 id="dialog-3-label">
 					Address Added
 				</h2>
-				<p id="dialog-3-desc" class="dialog_desc">
+				<p id="dialog-3-desc">
 					The address you provided has been added to your list of delivery addresses. It is ready
 					for immediate use. If you wish to remove it, you can do so from
 					<a href="#" onclick="dialogManager.openDialog('dialog-4', this)">
@@ -228,7 +230,7 @@
 					</a>
 				</p>
 				<div class="dialog_form_actions">
-					<button id="dialog3_close_btn" onclick="dialogManager.closeDialog(this)">
+					<button id="dialog3_close_btn" onclick="dialogManager.closeDialog()">
 						OK (close Dialog)
 					</button>
 				</div>
@@ -236,21 +238,21 @@
 		</div>
 		<div class="dialog-backdrop">
 			<div id="dialog-4"
-					role="dialog"
-					aria-labelledby="dialog-4-label"
-					aria-describedby="dialog-4-desc"
-					class="modal"
-					aria-modal="true"
+				role="dialog"
+				aria-labelledby="dialog-4-label"
+				aria-describedby="dialog-4-desc"
+				class="modal"
+				aria-modal="true"
 			>
-				<h2 id="dialog-4-label" class="dialog_label">
+				<h2 id="dialog-4-label">
 					End of the Road!
 				</h2>
-				<p id="dialog-4-desc" class="dialog_desc">
+				<p id="dialog-4-desc">
 					You activated a fake link or button that goes nowhere!
 					The link or button is present for demonstration purposes only.
 				</p>
 				<div class="dialog_form_actions">
-					<button id="dialog4_close_btn" onclick="dialogManager.closeDialog(this)">
+					<button id="dialog4_close_btn" onclick="dialogManager.closeDialog()">
 						Close
 					</button>
 				</div>
@@ -259,10 +261,10 @@
 		
 		<div class="dialog-backdrop">
 			<div id="panel-1"
-					role="dialog"
-					aria-modal="true"
-					class="panel"
-					aria-label="Hamburger menu"
+				role="dialog"
+				aria-modal="true"
+				class="panel"
+				aria-label="Hamburger menu"
 			>
 				<br>
 				<a href="index.html">link 1</a>
@@ -339,33 +341,34 @@
 	</div>
 	<script type="module">
 		import { DialogManager } from './index.mjs';
+		
 		window.dialogManager = new DialogManager();
-
+		
 		document.querySelectorAll('[data-js-open-dialog]').forEach(button => {
 			const controlledModalId = button.getAttribute('data-js-open-dialog');
 			if (controlledModalId === null) {
 				return;
 			}
-
+			
 			const openModal = () => {
 				dialogManager.openDialog(controlledModalId, button);
 			};
-
-			button.addEventListener('click', openModal)
+			
+			button.addEventListener('click', openModal);
 		});
-
+		
 		// Make bootstrap basic compatibility
 		document.querySelectorAll('[data-toggle="modal"]').forEach(button => {
 			const controlledModalId = button.getAttribute('data-target');
 			if (controlledModalId === null) {
 				return;
 			}
-
+			
 			const openModal = () => {
-				dialogManager.openDialog(controlledModalId, button)
+				dialogManager.openDialog(controlledModalId, button);
 			};
-
-			button.addEventListener('click', openModal)
+			
+			button.addEventListener('click', openModal);
 		});
 	</script>
 </body>

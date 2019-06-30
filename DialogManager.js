@@ -7,9 +7,6 @@ export default class DialogManager {
 		});
 
 		this.dialogsStack = [];
-
-		this.handleEscape = this._handleEscape.bind(this);
-		this.handleClose = this._handleCloseButton.bind(this);
 	}
 
 	openDialog(dialogId, focusAfterClose, focusAfterOpen) {
@@ -67,6 +64,9 @@ export default class DialogManager {
 	}
 
 	_addEventListeners() {
+		this.handleEscape = this._handleEscape.bind(this);
+		this.handleClose = this._handleCloseButton.bind(this);
+
 		document.addEventListener('keyup', this.handleEscape);
 		document.addEventListener('click', this.handleClose);
 	}
@@ -95,7 +95,6 @@ export default class DialogManager {
 	}
 
 	_createDialog(dialogId, focusAfterClose, focusAfterOpen) {
-		DialogManager.validateDialogStructure(dialogId);
 		const dialog = new Dialog(this, dialogId, focusAfterClose, focusAfterOpen);
 		dialog.create();
 		this.dialogsStack.push(dialog);
@@ -130,22 +129,5 @@ export default class DialogManager {
 			}
 			this.alert = null;
 		}, 1000);
-	}
-
-	static validateDialogStructure(dialogId) {
-		if (dialogId === null || document.getElementById(dialogId) === null) {
-			throw new Error(`No element found with id="${dialogId}".`);
-		}
-
-		const validRoles = ['dialog', 'alertdialog'];
-		const isDialog = (document.getElementById(dialogId).getAttribute('role') || '')
-			.trim()
-			.split(/\s+/g)
-			.some(token => validRoles.some((role) => {
-				return token === role;
-			}));
-		if (!isDialog) {
-			throw new Error('Dialog() requires a DOM element with ARIA role of "dialog" or "alertdialog".');
-		}
 	}
 }

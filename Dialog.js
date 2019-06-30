@@ -2,29 +2,35 @@ import FocusUtils from './FocusUtils.js';
 
 export default class Dialog {
 	/*
-	*   Dialog / Alert dialog
-	*   This content is licensed according to the W3C Software License at
-	*   https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document
-	*   Please see full specifications at:
-	*   https://www.w3.org/TR/wai-aria-practices/examples/dialog-modal/dialog.html
-	*   https://www.w3.org/TR/wai-aria-practices/#alertdialog
+	* Dialog / Alert dialog / Modal window / Modal panel
+	*
+	* Please see full specifications at:
+	* https://www.w3.org/TR/wai-aria-practices/#dialog_modal
+	* https://www.w3.org/TR/wai-aria-practices/#alertdialog
+	*
+	* This software or document includes material copied from or derived from
+	* https://www.w3.org/TR/wai-aria-practices/examples/dialog-modal/dialog.html.
+	* Copyright ©2019 W3C® (MIT, ERCIM, Keio, Beihang).
+	* All Rights Reserved. This work is distributed under the
+	* W3C® Software License http://www.w3.org/Consortium/Legal/copyright-software
+	* in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+	* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+	* PARTICULAR PURPOSE.
 	*/
 	constructor(dialogManager, dialogId, focusAfterClose, focusAfterOpen) {
+		Dialog.validateDialogStructure(dialogId);
 		this.dialogManager = dialogManager;
 		this.dialogNode = document.getElementById(dialogId);
 		this.focusAfterClose = Dialog.setFocusAfterCloseElement(focusAfterClose);
 		this.focusAfterOpen = Dialog.setFocusAfterOpenElement(focusAfterOpen);
-		this.isForcedToChoice = this.dialogNode.getAttribute('data-isForcedToChoice') ||
-			false; // allow close only by choice
+		this.isForcedToChoice = this.dialogNode.getAttribute(
+			'data-isForcedToChoice') || false; // allow close only by choice
 		this.backdropNode = null;
 
 		// Additional methods
 		this.focusFirstDescendant = FocusUtils.focusFirstDescendant;
 		this.focusLastDescendant = FocusUtils.focusLastDescendant;
 		this.searchingFocusedElement = FocusUtils.searchingFocusedElement;
-
-		this.handleFocus = this.handleFocus.bind(this);
-		this.handleBackdropClick = this.handleBackdropClick.bind(this);
 	}
 
 	create() {
@@ -75,6 +81,8 @@ export default class Dialog {
 	}
 
 	initEventListeners() {
+		this.handleFocus = this.handleFocus.bind(this);
+
 		document.addEventListener('focus', this.handleFocus, true);
 	}
 
@@ -134,6 +142,7 @@ export default class Dialog {
 			this.encloseModalWithBackdrop(backdropClass);
 		}
 
+		this.handleBackdropClick = this.handleBackdropClick.bind(this);
 		this.backdropNode.addEventListener('click', this.handleBackdropClick);
 		this.backdropNode.classList.add('is-active');
 		this.backdropNode.classList.add('is-top-dialog');
@@ -169,8 +178,7 @@ export default class Dialog {
 		);
 	}
 
-	beforeClose() {
-	}
+	beforeClose() {}
 
 	static setFocusAfterOpenElement(focusFirst) {
 		let focusElement;
@@ -196,5 +204,22 @@ export default class Dialog {
 		}
 
 		return focusElement;
+	}
+
+	static validateDialogStructure(dialogId) {
+		if (dialogId === null || document.getElementById(dialogId) === null) {
+			throw new Error(`No element found with id="${dialogId}".`);
+		}
+
+		const validRoles = ['dialog', 'alertdialog'];
+		const isDialog = (document.getElementById(dialogId).getAttribute('role') || '')
+			.trim()
+			.split(/\s+/g)
+			.some(token => validRoles.some((role) => {
+				return token === role;
+			}));
+		if (!isDialog) {
+			throw new Error('Dialog() requires a DOM element with ARIA role of "dialog" or "alertdialog".');
+		}
 	}
 }

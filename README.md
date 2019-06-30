@@ -1,6 +1,6 @@
 # aria-dialog
 
-WAI ARIA AAA compliance implementation of dialogs/modal/alert windows. 
+WAI ARIA 1.1 AAA compliance implementation of dialogs/modal/alert windows. 
 
 This class could be used to create offcanvas panels, alerts, dialogs and modal windows. 
 It handles multiple stacked modal window/panels with overlaying or replacing previous dialog 
@@ -31,7 +31,7 @@ Please see full specifications at:
 
 ### Known issues
 
-* Windows Narrator with MS Edge and Orca with Epiphany not announce alert content in "force modal" dialog 
+* Windows Narrator with MS Edge and Orca with Epiphany not announce alert content in "force modal" dialog
 
 ## API
 
@@ -85,12 +85,12 @@ Alternativlly:
 
 ## License
 
-This software or document includes material copied from or derived from
-https://www.w3.org/TR/wai-aria-practices/examples/dialog-modal/dialog.html.
+This software or document includes material copied from or derived from 
+[dialog](https://www.w3.org/TR/wai-aria-practices/examples/dialog-modal/dialog.html).
 Copyright ©2019 W3C® (MIT, ERCIM, Keio, Beihang).
 
 All Rights Reserved. This work is distributed under the
-W3C® Software License http://www.w3.org/Consortium/Legal/copyright-software
+[W3C® Software License](http://www.w3.org/Consortium/Legal/copyright-software)
 in the hope that it will be useful, but WITHOUT ANY WARRANTY;
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 PARTICULAR PURPOSE.

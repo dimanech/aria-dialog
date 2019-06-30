@@ -1,4 +1,4 @@
-import Dialog from './Dialog.js';
+import Dialog from './Dialog.mjs';
 
 export default class DialogManager {
 	constructor() {

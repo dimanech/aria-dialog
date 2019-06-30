@@ -276,7 +276,8 @@
 		<br>
 		<button>Page focusable element 2 (Should not be focused if modal open)</button>
 		<br>
-		<input type="text" value="Page focusable element 3 (Should not be focused if modal open)">
+		<input id="page-focusable-input" type="text" value=""/>
+		<label for="page-focusable-input">Page focusable element 3 (Should not be focused if modal open)</label>
 		
 		<div id="lipsum">
 			<p>
@@ -337,7 +338,7 @@
 	
 	</div>
 	<script type="module">
-		import { DialogManager } from './index.js';
+		import { DialogManager } from '../index.js';
 		window.dialogManager = new DialogManager();
 
 		document.querySelectorAll('[data-js-open-dialog]').forEach(button => {

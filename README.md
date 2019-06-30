@@ -4,7 +4,7 @@ WAI ARIA AAA compatible dialogs/modal/alert windows implementation. That could b
 
 Please see full specifications at:
 
-* https://www.w3.org/TR/wai-aria-practices/examples/dialog-modal/dialog.html
+* https://www.w3.org/TR/wai-aria-practices/#dialog_modal
 * https://www.w3.org/TR/wai-aria-practices/#alertdialog
 
 ## Initialization

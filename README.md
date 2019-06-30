@@ -6,8 +6,9 @@ This class could be used to create offcanvas panels, alerts, dialogs and modal w
 It handles multiple stacked modal window/panels with overlaying or replacing previous dialog 
 and proper focus chain between all modals and root page.
 
-This module designed as library that could be used as starting point on the project. It is not
-"just add the water" ready made component.
+It has been modified from w3c aria practice example in the following ways:
+
+* the code has been updated to modern javascript standards
 
 ## Specs
 
@@ -24,6 +25,7 @@ Please see full specifications at:
 * Safari 12.1.1
 * Firefox 67.0.4
 
+---
 
 * Windows Narrator with MS Edge
 * MacOS VoiceOver Utiltiy (v9 562.858) with Safari, Google Chrome
@@ -34,6 +36,9 @@ Please see full specifications at:
 * Windows Narrator with MS Edge and Orca with Epiphany not announce alert content in "force modal" dialog
 
 ## API
+
+This module designed as library that could be used as starting point on the project. It is not
+"just add the water" ready made component.
 
 ### DialogManager
 

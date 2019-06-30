@@ -16,6 +16,17 @@ Please see full specifications at:
 * https://www.w3.org/TR/wai-aria-practices/#dialog_modal
 * https://www.w3.org/TR/wai-aria-practices/#alertdialog
 
+## Supporting browsers
+
+* IE10 with babel
+* Edge
+* Chrome
+* Safari
+* FF
+
+* MacOS VoiceOver with Safari
+* Gnome Orca Screen Reader 3.32 with Firefox (Gecko) and Epiphany (WebKitGtk)
+
 ## Usage
 
 You could initialize this component in this way:

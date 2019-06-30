@@ -20,18 +20,18 @@ Please see full specifications at:
 
 * IE10 (with Babel + DOM Collections forEach)
 * Edge 44.18362.1.0
-* Chrome
-* Safari
-* FF
+* Chrome 75.0.3770.100
+* Safari 12.1.1
+* Firefox 67.0.4
 
 
 * Windows Narrator with MS Edge
-* MacOS VoiceOver with Safari
+* MacOS VoiceOver Utiltiy (v9 562.858) with Safari, Google Chrome
 * Gnome Orca Screen Reader 3.32 with Firefox (Gecko) and Epiphany (WebKitGtk)
 
 ### Known issues
 
-* Windows Narrator and Orca not announce alert content in "force modal" dialog 
+* Windows Narrator with MS Edge and Orca with Epiphany not announce alert content in "force modal" dialog 
 
 ## API
 

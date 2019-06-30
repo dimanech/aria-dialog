@@ -1,4 +1,4 @@
-import FocusUtils from './FocusUtils.js';
+import FocusUtils from './FocusUtils.mjs';
 
 export default class Dialog {
 	/*

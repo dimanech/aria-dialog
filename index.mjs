@@ -1,5 +1,7 @@
-import DialogManager from './DialogManager.mjs';
-import Dialog from './Dialog.mjs';
-import FocusUtils from './FocusUtils.mjs';
+import DialogManager from './DialogManager.js';
+import DialogButton from './DialogButton.js';
 
-export { DialogManager, Dialog, FocusUtils };
+const dialogManager = new DialogManager().init();
+
+document.querySelectorAll('[data-component="DialogButton"]')
+	.forEach(item => new DialogButton(item, dialogManager).init());

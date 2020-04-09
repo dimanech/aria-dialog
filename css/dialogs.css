@@ -9,6 +9,10 @@
 	outline: solid 4px red;
 }
 
+html, body {
+	overscroll-behavior-x: none;
+}
+
 body {
 	margin: 0;
 }
